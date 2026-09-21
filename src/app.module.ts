@@ -3,9 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggingModule } from './common/logging/logging.module';
+import { AuthModule } from './core/passport/passport.module';
 import { DatabaseModule } from './core/database/database.module';
 import { HashingModule } from './core/hashing/hashing.module';
 import { JwtModule } from './core/jwt/jwt.module';
+import { UsersModule } from './features/users/users.module';
 import appConfig from '../config/app.config';
 import databaseConfig from '../config/database.config';
 import hashingConfig from '../config/hashing.config';
@@ -23,6 +25,8 @@ import loggerConfig from '../config/logger.config';
     DatabaseModule,
     JwtModule,
     HashingModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

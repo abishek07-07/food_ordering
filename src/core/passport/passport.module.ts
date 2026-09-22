@@ -1,6 +1,6 @@
-import { Global, Module } from '@nestjs/common';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { Global, Module } from "@nestjs/common";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
+import { JwtStrategy } from "./strategies/jwt.strategy";
 
 @Global()
 @Module({

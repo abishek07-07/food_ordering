@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import bcrypt from 'bcryptjs';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import bcrypt from "bcryptjs";
 
 @Injectable()
 export class HashService {
@@ -9,7 +9,7 @@ export class HashService {
   hashData(data: string): string {
     return bcrypt.hashSync(
       data,
-      this.cfg.getOrThrow<number>('hashing.saltRounds'),
+      this.cfg.getOrThrow<number>("hashing.saltRounds"),
     );
   }
 

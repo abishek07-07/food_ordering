@@ -1,4 +1,3 @@
-
 export interface Results<T> {
   statusCode: number;
   data: T;

@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   JwtService,
   type JwtSignOptions,
   type JwtVerifyOptions,
-} from '@nestjs/jwt';
+} from "@nestjs/jwt";
 
 @Injectable()
 export class AppJwtService {

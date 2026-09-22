@@ -35,7 +35,7 @@ export class UserLoginService implements UseCase<
       });
 
     const accessToken = this.jwtService.sign({
-      sub: userExists.slug ?? userExists.email ?? "",
+      sub: userExists.slug as string,
       email: userExists.email ?? "",
     });
 

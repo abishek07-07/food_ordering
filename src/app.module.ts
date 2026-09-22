@@ -9,6 +9,7 @@ import { HashingModule } from "./core/hashing/hashing.module";
 import { JwtModule } from "./core/jwt/jwt.module";
 import { UsersModule } from "./features/users/users.module";
 import { GroceriesModule } from "./features/groceries/groceries.module";
+import { CartModule } from "./features/carts/cart.module";
 import appConfig from "../config/app.config";
 import databaseConfig from "../config/database.config";
 import hashingConfig from "../config/hashing.config";
@@ -29,6 +30,7 @@ import loggerConfig from "../config/logger.config";
     AuthModule,
     UsersModule,
     GroceriesModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

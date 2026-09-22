@@ -33,6 +33,10 @@ export class UsersRepository {
       .first();
   }
 
+  async findIdBySlug(slug: string): Promise<{ id: number } | undefined> {
+    return this.db<Users>("users").select("id").where("slug", slug).first();
+  }
+
   async insertUser(request: InsertUserRequst): Promise<number> {
     return await this.db<Users>("users").insert(request, "id");
   }

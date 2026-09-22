@@ -1,0 +1,2 @@
+git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|js|json|md)$' | xargs -r pnpm exec prettier --write --ignore-unknown
+git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|js|json|md)$' | xargs -r git add

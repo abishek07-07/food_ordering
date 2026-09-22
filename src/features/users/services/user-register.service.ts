@@ -10,13 +10,14 @@ import { UserRegisterRequest } from "../request/user-register.request";
 import { RolesRepository } from "../repository/roles.repository";
 
 @Injectable()
-export class UserRegisterService
-  implements UseCase<UserRegisterRequest, Omit<IUserExceptPassword, "id" |"slug">>
-{
+export class UserRegisterService implements UseCase<
+  UserRegisterRequest,
+  Omit<IUserExceptPassword, "id" | "slug">
+> {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly hashService: HashService,
-    private readonly rolesRepository : RolesRepository
+    private readonly rolesRepository: RolesRepository,
   ) {}
 
   async execute(
@@ -25,15 +26,15 @@ export class UserRegisterService
     const existing = await this.usersRepository.findByEmail(data.email);
     if (existing != null) throw new ConflictException("Email already in use");
 
-     const user : number = await this.usersRepository.insertUser({
+    const user: number = await this.usersRepository.insertUser({
       first_name: data.firstName,
       last_name: data.lastname,
       middle_name: data.middleName,
       email: data.email,
       password: this.hashService.hashData(data.password),
-     });
+    });
 
-    await this.rolesRepository.addRoleToUser(user)
+    await this.rolesRepository.addRoleToUser(user);
 
     return {
       statusCode: 201,

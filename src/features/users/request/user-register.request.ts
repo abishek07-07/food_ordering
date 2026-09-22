@@ -1,18 +1,24 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from "class-validator";
 
-export class UserRegisterRequest  {
+export class UserRegisterRequest {
   @IsString()
   @IsNotEmpty()
-  firstName: string
+  firstName: string;
   @IsString()
   @IsNotEmpty()
-  lastname: string
+  lastname: string;
   @IsOptional()
   @IsString()
-  middleName?: string
+  middleName?: string;
   @IsEmail()
-  email: string
+  email: string;
   @IsString()
   @MinLength(8)
-  password: string
+  password: string;
 }

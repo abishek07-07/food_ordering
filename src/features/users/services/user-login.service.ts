@@ -7,31 +7,31 @@ import { UsersRepository } from "../repository/users.repository";
 import { HashService } from "src/core/hashing/hashing.service";
 import { AppJwtService } from "src/core/jwt/jwt.service";
 
-
 @Injectable()
 export class UserLoginService implements UseCase<
   UserLoginRequest,
-  UserLoginResponse>
-{
-  constructor(private readonly userRepository: UsersRepository,
+  UserLoginResponse
+> {
+  constructor(
+    private readonly userRepository: UsersRepository,
     private readonly hashing: HashService,
-    private readonly jwtService: AppJwtService)
-    {}
+    private readonly jwtService: AppJwtService,
+  ) {}
   async execute(data: UserLoginRequest): Promise<Results<UserLoginResponse>> {
-    const userExists = await this.userRepository.findByEmail(data.email)
-
+    const userExists = await this.userRepository.findByEmail(data.email);
 
     if (userExists == null)
       throw new BadRequestException("Invalid credentials", {
         description: "Invalid credentials",
       });
 
-    const checkPassword: boolean = userExists.password != null &&
+    const checkPassword: boolean =
+      userExists.password != null &&
       this.hashing.compareHashData(data.password, userExists.password);
 
     if (!checkPassword)
       throw new BadRequestException("Invalid Credentials", {
-        cause: "Invalid Credentials"
+        cause: "Invalid Credentials",
       });
 
     const accessToken = this.jwtService.sign({
@@ -54,6 +54,4 @@ export class UserLoginService implements UseCase<
       },
     };
   }
-
-
 }

@@ -15,6 +15,7 @@ import databaseConfig from "../config/database.config";
 import hashingConfig from "../config/hashing.config";
 import jwtConfig from "../config/jwt.config";
 import loggerConfig from "../config/logger.config";
+import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import loggerConfig from "../config/logger.config";
     CartModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, HttpExceptionFilter],
 })
 export class AppModule {}

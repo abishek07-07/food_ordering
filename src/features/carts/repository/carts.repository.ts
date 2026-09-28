@@ -20,11 +20,11 @@ export class CartsRepository {
   }
 
   async createCart(userID: number): Promise<number> {
-    const [row] = await this.db<Carts>("cart").insert(
+    const [row] = (await this.db<Carts>("cart").insert(
       { user_id: userID },
       "id",
-    );
-    return typeof row === "object" ? (row as Carts).id : (row as number);
+    )) as unknown as ({ id: number } | number)[];
+    return typeof row === "object" ? row.id : row;
   }
 
   async findActiveItem(

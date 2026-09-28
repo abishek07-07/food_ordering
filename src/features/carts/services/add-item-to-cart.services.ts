@@ -25,7 +25,7 @@ export class AddItemToCartService implements UseCase<AddItemToCartInput, null> {
       cart = { id: cartId, user_id: data.userID } as Carts;
     }
 
-    await this.cartRepository.addItemsToCart(cart!.id, {
+    await this.cartRepository.addItemsToCart(cart.id, {
       quantity: data.quantity,
       groceriesID: grocery.id,
     });

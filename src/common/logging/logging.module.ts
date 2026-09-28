@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { WinstonModule, utilities } from "nest-winston";
 import * as winston from "winston";
 import { AppLoggerService } from "./logging.service";
+import { LoggingInterceptor } from "./logging.interceptor";
 
 @Global()
 @Module({
@@ -22,7 +23,7 @@ import { AppLoggerService } from "./logging.service";
       }),
     }),
   ],
-  providers: [AppLoggerService],
-  exports: [AppLoggerService, WinstonModule],
+  providers: [AppLoggerService, LoggingInterceptor],
+  exports: [AppLoggerService, LoggingInterceptor, WinstonModule],
 })
 export class LoggingModule {}

@@ -38,7 +38,11 @@ export class UsersRepository {
   }
 
   async insertUser(request: InsertUserRequst): Promise<number> {
-    return await this.db<Users>("users").insert(request, "id");
+    const [row] = (await this.db<Users>("users").insert(
+      request,
+      "id",
+    )) as unknown as ({ id: number } | number)[];
+    return typeof row === "object" ? row.id : row;
   }
 
   async updateUserBySlug(

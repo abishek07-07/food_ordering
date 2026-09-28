@@ -40,7 +40,7 @@ function knexConfig(cfg: ConfigService): Knex.Config {
 export class DatabaseModule implements OnModuleDestroy {
   constructor(@Inject(KNEX) private readonly db: Knex) {}
 
-  onModuleDestroy() {
-    return this.db.destroy();
+  async onModuleDestroy() {
+    await this.db.destroy();
   }
 }

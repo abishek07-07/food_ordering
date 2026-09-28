@@ -8,7 +8,9 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from "@nestjs/common";
+import { JwtAuthGuard } from "src/core/passport/guards/jwt-auth.guard";
 import { FindGroceriesService } from "./services/find-groceries.service";
 import { FindGroceriesByID } from "./services/find-groceries-by-id.service";
 import { AddGroceriesService } from "./services/add-groceries.service";
@@ -38,12 +40,14 @@ export class GroceriesController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   async add(@Body() data: AddGroceriesRequest) {
     return this.addGroceriesService.execute(data);
   }
 
   @Delete(":slug")
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async remove(@Param("slug") slug: string) {
     return this.deleteGroceriesService.execute({ slug });

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { UseCase } from "src/common/usecase/usecase";
 import { FindGroceriesRequest } from "../request/find-groceries.request";
 import { GroceriesWithPicture } from "../repository/interface";
@@ -18,7 +18,8 @@ export class FindGroceriesService implements UseCase<
     let cursorId = 0;
     if (data.start) {
       const row = await this.groceriesRepository.findIdBySlug(data.start);
-      cursorId = row?.id ?? 0;
+      if (!row) throw new NotFoundException("Invalid start cursor");
+      cursorId = row.id;
     }
 
     const items = await this.groceriesRepository.findGroceries(

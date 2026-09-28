@@ -58,7 +58,11 @@ export class GroceriesRepository {
   }
 
   async insertGrocery(request: InsertGroceryRequest): Promise<number> {
-    return this.db<Groceries>("groceries").insert(request, "id");
+    const [row] = (await this.db<Groceries>("groceries").insert(
+      request,
+      "id",
+    )) as unknown as ({ id: number } | number)[];
+    return typeof row === "object" ? row.id : row;
   }
 
   async deleteGroceryBySlug(slug: string): Promise<number> {

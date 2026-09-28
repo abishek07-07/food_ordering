@@ -12,7 +12,7 @@ export class UserRegisterRequest {
   firstName: string;
   @IsString()
   @IsNotEmpty()
-  lastname: string;
+  lastName: string;
   @IsOptional()
   @IsString()
   middleName?: string;

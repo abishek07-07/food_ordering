@@ -18,6 +18,7 @@ export class UserLoginService implements UseCase<
     private readonly jwtService: AppJwtService,
   ) {}
   async execute(data: UserLoginRequest): Promise<Results<UserLoginResponse>> {
+    console.log("The user login request is received");
     const userExists = await this.userRepository.findByEmail(data.email);
 
     if (userExists == null)

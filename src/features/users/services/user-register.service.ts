@@ -28,7 +28,7 @@ export class UserRegisterService implements UseCase<
 
     const user: number = await this.usersRepository.insertUser({
       first_name: data.firstName,
-      last_name: data.lastname,
+      last_name: data.lastName,
       middle_name: data.middleName,
       email: data.email,
       password: this.hashService.hashData(data.password),
@@ -41,7 +41,7 @@ export class UserRegisterService implements UseCase<
       message: "User registered successfully",
       data: {
         first_name: data.firstName,
-        last_name: data.lastname,
+        last_name: data.lastName,
         middle_name: data.middleName,
         email: data.email,
       },

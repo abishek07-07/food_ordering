@@ -11,7 +11,7 @@ export class RolesRepository {
   ) {}
 
   async addRoleToUser(userId: number): Promise<void> {
-    await this.db<UsersRoles>("users_roles").insert({
+    await this.db<UsersRoles>("user_roles").insert({
       user_id: userId,
       role_id: Number(process.env.DEFAULT_ROLE_ID ?? "1"),
     });

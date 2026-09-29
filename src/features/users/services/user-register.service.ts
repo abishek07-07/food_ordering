@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { Results } from "src/common/response/api-response";
 import { UseCase } from "src/common/usecase/usecase";
 import { HashService } from "src/core/hashing/hashing.service";
@@ -8,6 +12,7 @@ import {
 } from "../repository/users.repository";
 import { UserRegisterRequest } from "../request/user-register.request";
 import { RolesRepository } from "../repository/roles.repository";
+import { CreateCart } from "src/features/carts/services/create-cart.service";
 
 @Injectable()
 export class UserRegisterService implements UseCase<
@@ -18,6 +23,7 @@ export class UserRegisterService implements UseCase<
     private readonly usersRepository: UsersRepository,
     private readonly hashService: HashService,
     private readonly rolesRepository: RolesRepository,
+    private readonly cartService: CreateCart,
   ) {}
 
   async execute(
@@ -35,7 +41,12 @@ export class UserRegisterService implements UseCase<
     });
 
     await this.rolesRepository.addRoleToUser(user);
-
+    try {
+      await this.cartService.execute({ userID: user });
+    } catch (error) {
+      console.log("Error in creating the cart for the user", error);
+      throw new InternalServerErrorException("Error in creating the cart");
+    }
     return {
       statusCode: 201,
       message: "User registered successfully",

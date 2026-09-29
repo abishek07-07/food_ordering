@@ -6,17 +6,19 @@ import { RemoveItemFromCartService } from "./services/remove-item-from-cart.serv
 import { ClearCartService } from "./services/clear-cart.service";
 import { GetCartItemsService } from "./services/get-cart-items.services";
 import { GroceriesModule } from "../groceries/groceries.module";
+import { CreateCart } from "./services/create-cart.service";
 
 @Module({
   imports: [GroceriesModule],
   controllers: [CartController],
   providers: [
+    CreateCart,
     CartsRepository,
     AddItemToCartService,
     RemoveItemFromCartService,
     ClearCartService,
     GetCartItemsService,
   ],
-  exports: [CartsRepository],
+  exports: [CartsRepository, CreateCart],
 })
 export class CartModule {}

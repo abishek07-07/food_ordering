@@ -28,4 +28,8 @@ export type GroceriesWithPicture = Omit<Groceries, "id"> & {
   picture_url: string | null;
 };
 
+export type GroceriesWithPictures = Omit<Groceries, "id"> & {
+  picture_urls: string[];
+};
+
 export type InsertGroceryRequest = Omit<Groceries, "id">;

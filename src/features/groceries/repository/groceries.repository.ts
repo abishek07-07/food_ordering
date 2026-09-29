@@ -5,6 +5,7 @@ import {
   Groceries,
   GroceriesPictures,
   GroceriesWithPicture,
+  GroceriesWithPictures,
   InsertGroceryRequest,
 } from "./interface";
 
@@ -36,14 +37,15 @@ export class GroceriesRepository {
 
   async findGroceryBySlug(
     slug: string,
-  ): Promise<GroceriesWithPicture | undefined> {
+  ): Promise<GroceriesWithPictures | undefined> {
     const row = await this.db<Groceries>("groceries")
       .select("id", "name", "slug", "description")
       .where("slug", slug)
       .first();
     if (row == null) return undefined;
-    const [item] = await this.attachSinglePicture([row]);
-    return item;
+    const pictures = await this.findPicturesByProductIds([row.id]);
+    const { id, ...rest } = row;
+    return { ...rest, picture_urls: pictures.map((p) => p.picture_url) };
   }
 
   // Batch: one query for all products, no join.
@@ -51,9 +53,21 @@ export class GroceriesRepository {
     productIds: number[],
   ): Promise<Pick<GroceriesPictures, "product_id" | "picture_url">[]> {
     if (productIds.length === 0) return [];
-    return this.db<GroceriesPictures>("product_pictures")
+    return await this.db<GroceriesPictures>("product_pictures")
       .select("product_id", "picture_url")
       .whereIn("product_id", productIds)
+      .orderBy("id", "asc");
+  }
+
+  private async findSinglePictureByProductIds(
+    productIds: number[],
+  ): Promise<Pick<GroceriesPictures, "product_id" | "picture_url">[]> {
+    if (productIds.length === 0) return [];
+    return this.db<GroceriesPictures>("product_pictures")
+      .distinctOn("product_id")
+      .select("product_id", "picture_url")
+      .whereIn("product_id", productIds)
+      .orderBy("product_id", "asc")
       .orderBy("id", "asc");
   }
 
@@ -69,22 +83,20 @@ export class GroceriesRepository {
     return this.db<Groceries>("groceries").where("slug", slug).del();
   }
 
-  // ponytail: first picture wins per product; add explicit ordering if choice matters
+  // ponytail: lowest id wins per product via DISTINCT ON; cart service still dedupes in JS
   private async attachSinglePicture(
     rows: Pick<Groceries, "id" | "name" | "slug" | "description">[],
   ): Promise<GroceriesWithPicture[]> {
-    const pictures = await this.findPicturesByProductIds(
+    if (rows.length === 0) return [];
+    const pictures = await this.findSinglePictureByProductIds(
       rows.map((row) => row.id),
     );
-    const firstByProduct = new Map<number, string>();
-    for (const picture of pictures) {
-      if (!firstByProduct.has(picture.product_id)) {
-        firstByProduct.set(picture.product_id, picture.picture_url);
-      }
-    }
+    const urlByProduct = new Map(
+      pictures.map((picture) => [picture.product_id, picture.picture_url]),
+    );
     return rows.map(({ id, ...rest }) => ({
       ...rest,
-      picture_url: firstByProduct.get(id) ?? null,
+      picture_url: urlByProduct.get(id) ?? null,
     }));
   }
 }
